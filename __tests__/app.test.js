@@ -36,17 +36,18 @@ describe("app tests", () => {
           .get(`/api/reviews/${REVIEW_ID}`)
           .expect(200)
           .then(({ body: { reviews } }) => {
-            const reviewKeys = Object.keys(reviews);
-            expect(reviewKeys).toHaveLength(9);
-            expect(reviews).toHaveProperty("review_id");
-            expect(reviews).toHaveProperty("title");
-            expect(reviews).toHaveProperty("review_body");
-            expect(reviews).toHaveProperty("designer");
-            expect(reviews).toHaveProperty("review_img_url");
-            expect(reviews).toHaveProperty("votes");
-            expect(reviews).toHaveProperty("category");
-            expect(reviews).toHaveProperty("owner");
-            expect(reviews).toHaveProperty("created_at");
+            expect(reviews).toEqual({
+              review_id: 1,
+              title: "Agricola",
+              designer: "Uwe Rosenberg",
+              owner: "mallionaire",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "Farmyard fun!",
+              category: "euro game",
+              created_at: "2021-01-18T10:00:20.514Z",
+              votes: 1,
+            });
           });
       });
     });
