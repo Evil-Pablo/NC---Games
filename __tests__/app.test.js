@@ -20,13 +20,24 @@ describe("app tests", () => {
           .get("/api/categories")
           .expect(200)
           .then(({ body: { categories } }) => {
-            console.log(categories);
             const categoryKeys = Object.keys(categories[0]);
             expect(categoryKeys).toHaveLength(2);
             categories.forEach((category) => {
               expect(category).toHaveProperty("slug");
               expect(category).toHaveProperty("description");
             });
+          });
+      });
+    });
+  });
+  describe("app Sad Path", () => {
+    describe("badpath", () => {
+      test("404: invalidpath", () => {
+        return request(app)
+          .get("/invalid-path")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid Path");
           });
       });
     });
