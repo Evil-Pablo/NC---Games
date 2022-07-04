@@ -6,6 +6,8 @@ app.use(express.json());
 
 app.get("/api/categories", getCategories);
 
+app.get("/api/reviews/:/review_id", getReviewByID);
+
 app.use("*", (req, res) => {
   res.status(404).send({ msg: "Invalid Path" });
 });
