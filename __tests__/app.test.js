@@ -36,7 +36,6 @@ describe("app tests", () => {
           .get(`/api/reviews/${REVIEW_ID}`)
           .expect(200)
           .then(({ body: { reviews } }) => {
-            console.log(Object.keys(reviews));
             const reviewKeys = Object.keys(reviews);
             expect(reviewKeys).toHaveLength(9);
             expect(reviews).toHaveProperty("review_id");
