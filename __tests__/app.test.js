@@ -8,7 +8,6 @@ const {
   reviewData,
   userData,
 } = require("../db/data/test-data/index");
-const { get } = require("express/lib/response");
 
 beforeEach(() => seed({ categoryData, commentData, reviewData, userData }));
 afterAll(() => db.end());
@@ -37,19 +36,18 @@ describe("app tests", () => {
           .get(`/api/reviews/${REVIEW_ID}`)
           .expect(200)
           .then(({ body: { reviews } }) => {
-            const reviewKeys = Object.keys(reviews[0]);
+            console.log(Object.keys(reviews));
+            const reviewKeys = Object.keys(reviews);
             expect(reviewKeys).toHaveLength(9);
-            reviews.forEach((review) => {
-              expect(review).toHaveProperty("review_id");
-              expect(review).toHaveProperty("title");
-              expect(review).toHaveProperty("review_body");
-              expect(review).toHaveProperty("designer");
-              expect(review).toHaveProperty("review_img_url");
-              expect(review).toHaveProperty("votes");
-              expect(review).toHaveProperty("category");
-              expect(review).toHaveProperty("owner");
-              expect(review).toHaveProperty("created_at");
-            });
+            expect(reviews).toHaveProperty("review_id");
+            expect(reviews).toHaveProperty("title");
+            expect(reviews).toHaveProperty("review_body");
+            expect(reviews).toHaveProperty("designer");
+            expect(reviews).toHaveProperty("review_img_url");
+            expect(reviews).toHaveProperty("votes");
+            expect(reviews).toHaveProperty("category");
+            expect(reviews).toHaveProperty("owner");
+            expect(reviews).toHaveProperty("created_at");
           });
       });
     });
