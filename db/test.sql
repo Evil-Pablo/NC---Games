@@ -1,3 +1,5 @@
 \c nc_games
 
-SELECT * FROM categories;
+    SELECT *
+    FROM reviews
+    WHERE review_id = 1;
