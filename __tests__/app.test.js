@@ -104,7 +104,7 @@ describe("app tests", () => {
           .get(`/api/reviews/${REVIEW_ID}`)
           .expect(400)
           .then(({ body: { msg } }) => {
-            expect(msg).toBe("invalid input data");
+            expect(msg).toBe("Invalid input data");
           });
       });
       test("400: invalid input data", () => {
@@ -115,7 +115,27 @@ describe("app tests", () => {
           .send(VOTE_INCREMENT)
           .expect(400)
           .then(({ body: { msg } }) => {
-            expect(msg).toBe("invalid input data");
+            expect(msg).toBe("Invalid input data");
+          });
+      });
+      test("400: invalid key on input data", () => {
+        const REVIEW_ID = 1;
+        const VOTE_INCREMENT = { wrong_key: 1 };
+        return request(app)
+          .patch(`/api/reviews/${REVIEW_ID}`)
+          .send(VOTE_INCREMENT)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid input data");
+          });
+      });
+      test("400: Review ID datatype invalid", () => {
+        const REVIEW_ID = "invalidID";
+        return request(app)
+          .patch(`/api/reviews/${REVIEW_ID}`)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid input data");
           });
       });
     });
