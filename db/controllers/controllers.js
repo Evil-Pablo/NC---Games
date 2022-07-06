@@ -19,6 +19,7 @@ exports.getReviewByID = (req, res) => {
 
 exports.getUsers = (req, res) => {
   selectUsers().then((users) => {
-    res.status(200).send(users);
+    console.log(users);
+    res.status(200).send({ users });
   });
 };

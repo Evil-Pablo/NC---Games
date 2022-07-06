@@ -56,10 +56,10 @@ describe("app tests", () => {
         return request(app)
           .get("/api/users")
           .expect(200)
-          .then(({ body }) => {
-            const userKeys = Object.keys(body[0]);
+          .then(({ body: { users } }) => {
+            const userKeys = Object.keys(users[0]);
             expect(userKeys).toHaveLength(3);
-            body.forEach((user) => {
+            users.forEach((user) => {
               expect(user).toHaveProperty("username");
               expect(user).toHaveProperty("name");
               expect(user).toHaveProperty("avatar_url");
