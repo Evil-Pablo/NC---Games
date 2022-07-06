@@ -37,7 +37,7 @@ describe("app tests", () => {
           .expect(200)
           .then(({ body: { review } }) => {
             expect(review).toEqual({
-              review_id: 1,
+              review_id: REVIEW_ID,
               title: "Agricola",
               designer: "Uwe Rosenberg",
               owner: "mallionaire",
@@ -61,7 +61,7 @@ describe("app tests", () => {
           .expect(200)
           .then(({ body: { reviews } }) => {
             expect(reviews).toEqual({
-              review_id: 1,
+              review_id: REVIEW_ID,
               title: "Agricola",
               designer: "Uwe Rosenberg",
               owner: "mallionaire",
