@@ -16,7 +16,6 @@ exports.selectReviewByID = (reviewID) => {
 
 exports.selectUsers = () => {
   return db.query("SELECT * FROM users;").then((users) => {
-    // console.log("MODELS>>>>>", users.rows);
     return users.rows;
   });
 };
