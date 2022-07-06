@@ -33,10 +33,10 @@ describe("app tests", () => {
       test("200: responds with review object passed by user", () => {
         const REVIEW_ID = 1;
         return request(app)
-          .get(`/api/reviews/${REVIEW_ID}`)
+          .get(`/api/reviews/1`)
           .expect(200)
-          .then(({ body: { reviews } }) => {
-            expect(reviews).toEqual({
+          .then(({ body: { review } }) => {
+            expect(review).toEqual({
               review_id: 1,
               title: "Agricola",
               designer: "Uwe Rosenberg",
@@ -60,7 +60,6 @@ describe("app tests", () => {
           .send(VOTE_INCREMENT)
           .expect(200)
           .then(({ body: { reviews } }) => {
-            console.log("TEST>>>>>>", reviews, "<<<<<<TEST");
             expect(reviews).toEqual({
               review_id: 1,
               title: "Agricola",
@@ -85,6 +84,27 @@ describe("app tests", () => {
           .expect(404)
           .then(({ body: { msg } }) => {
             expect(msg).toBe("Invalid Path");
+          });
+      });
+    });
+    describe("GET /api/reviews/:review_id", () => {
+      test("404: ID doesn't exist", () => {
+        const REVIEW_ID = 0;
+        return request(app)
+          .get(`/api/reviews/${REVIEW_ID}`)
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Review does not exist");
+          });
+      });
+
+      test("400: Review ID datatype invalid", () => {
+        const REVIEW_ID = "invalidID";
+        return request(app)
+          .get(`/api/reviews/${REVIEW_ID}`)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Review ID is an invalid data type");
           });
       });
     });

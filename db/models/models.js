@@ -9,8 +9,11 @@ exports.selectCategories = () => {
 exports.selectReviewByID = (reviewID) => {
   return db
     .query("SELECT * FROM reviews WHERE review_id = $1;", [reviewID])
-    .then((result) => {
-      return result.rows[0];
+    .then(({ rows, rowCount }) => {
+      if (rowCount === 0) {
+        return Promise.reject({ status: 404, msg: "Review does not exist" });
+      }
+      return rows[0];
     });
 };
 
