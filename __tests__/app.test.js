@@ -87,7 +87,7 @@ describe("app tests", () => {
           });
       });
     });
-    describe("GET /api/reviews/:review_id", () => {
+    describe("/api/reviews/:review_id", () => {
       test("404: ID doesn't exist", () => {
         const REVIEW_ID = 0;
         return request(app)
@@ -104,7 +104,18 @@ describe("app tests", () => {
           .get(`/api/reviews/${REVIEW_ID}`)
           .expect(400)
           .then(({ body: { msg } }) => {
-            expect(msg).toBe("Review ID is an invalid data type");
+            expect(msg).toBe("invalid input data");
+          });
+      });
+      test("400: invalid input data", () => {
+        const REVIEW_ID = 1;
+        const VOTE_INCREMENT = { inc_votes: "two" };
+        return request(app)
+          .patch(`/api/reviews/${REVIEW_ID}`)
+          .send(VOTE_INCREMENT)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("invalid input data");
           });
       });
     });

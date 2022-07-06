@@ -21,10 +21,14 @@ exports.getReviewByID = (req, res, next) => {
     });
 };
 
-exports.patchVotesByReviewID = (req, res) => {
+exports.patchVotesByReviewID = (req, res, next) => {
   let reviewID = req.params.review_id;
   let newVote = req.body.inc_votes;
-  updateVoteByReviewID(reviewID, newVote).then((reviews) => {
-    res.status(200).send({ reviews });
-  });
+  updateVoteByReviewID(reviewID, newVote)
+    .then((reviews) => {
+      res.status(200).send({ reviews });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
