@@ -2,6 +2,7 @@ const {
   selectCategories,
   selectReviewByID,
   updateVoteByReviewID,
+  selectUsers,
 } = require("../models/models");
 
 exports.getCategories = (req, res) => {
@@ -32,4 +33,11 @@ exports.patchVotesByReviewID = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.getUsers = (req, res) => {
+  selectUsers().then((users) => {
+    console.log(users);
+    res.status(200).send({ users });
+  });
 };

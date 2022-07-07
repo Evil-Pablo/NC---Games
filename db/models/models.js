@@ -34,3 +34,9 @@ exports.updateVoteByReviewID = (reviewID, newVote) => {
       return rows[0];
     });
 };
+
+exports.selectUsers = () => {
+  return db.query("SELECT * FROM users;").then((users) => {
+    return users.rows;
+  });
+};

@@ -75,6 +75,22 @@ describe("app tests", () => {
           });
       });
     });
+    describe("GET /api/users", () => {
+      test("200: responds with an array of users", () => {
+        return request(app)
+          .get("/api/users")
+          .expect(200)
+          .then(({ body: { users } }) => {
+            const userKeys = Object.keys(users[0]);
+            expect(userKeys).toHaveLength(3);
+            users.forEach((user) => {
+              expect(user).toHaveProperty("username");
+              expect(user).toHaveProperty("name");
+              expect(user).toHaveProperty("avatar_url");
+            });
+          });
+      });
+    });
   });
   describe("app Sad Path", () => {
     describe("badpath", () => {
