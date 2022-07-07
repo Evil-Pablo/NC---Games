@@ -36,20 +36,32 @@ describe("app tests", () => {
           .get(`/api/reviews/1`)
           .expect(200)
           .then(({ body: { review } }) => {
-            expect(review).toEqual({
-              review_id: REVIEW_ID,
-              title: "Agricola",
-              designer: "Uwe Rosenberg",
-              owner: "mallionaire",
-              review_img_url:
-                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-              review_body: "Farmyard fun!",
-              category: "euro game",
-              created_at: "2021-01-18T10:00:20.514Z",
-              votes: 1,
-            });
+            expect(reviews).toHaveProperty("review_id", 1);
+            expect(reviews).toHaveProperty("title", "Agricola");
+            expect(reviews).toHaveProperty("designer", "Uwe Rosenberg");
+            expect(reviews).toHaveProperty("owner", "mallionaire");
+            expect(reviews).toHaveProperty(
+              "review_img_url",
+              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+            );
+            expect(reviews).toHaveProperty("review_body", "Farmyard fun!");
+            expect(reviews).toHaveProperty("category", "euro game");
+            expect(reviews).toHaveProperty(
+              "created_at",
+              "2021-01-18T10:00:20.514Z"
+            );
+            expect(reviews).toHaveProperty("votes", 1);
+            expect(reviews).toHaveProperty("comment_count");
+            expect(typeof reviews.comment_count).toBe("number");
           });
       });
+      test("200: comment count works for multiple comments", () => {
+        const REVIEW_ID = 2;
+        return request(app)
+          .get(`/api/reviews/${REVIEW_ID}`)
+          .expect(200)
+          .then(({ body: { reviews } }) => {
+            expect(reviews).toHaveProperty("comment_count", 3);
     });
     describe("PATCH /api/reviews/:review_id", () => {
       test("200: responds with updated review object where vote is incremented by newVote value", () => {
