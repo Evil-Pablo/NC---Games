@@ -36,7 +36,6 @@ describe("app tests", () => {
           .get(`/api/reviews/${REVIEW_ID}`)
           .expect(200)
           .then(({ body: { reviews } }) => {
-            console.log(reviews);
             expect(reviews).toHaveProperty("review_id", 1);
             expect(reviews).toHaveProperty("title", "Agricola");
             expect(reviews).toHaveProperty("designer", "Uwe Rosenberg");
@@ -62,7 +61,6 @@ describe("app tests", () => {
           .get(`/api/reviews/${REVIEW_ID}`)
           .expect(200)
           .then(({ body: { reviews } }) => {
-            console.log(reviews);
             expect(reviews).toHaveProperty("comment_count", 3);
           });
       });

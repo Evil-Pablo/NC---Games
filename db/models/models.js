@@ -12,8 +12,11 @@ exports.selectReviewByID = (reviewID) => {
       "SELECT reviews.*, CAST(COUNT(comments.comment_id) AS INTEGER) AS comment_count FROM reviews LEFT JOIN comments ON reviews.review_id = comments.review_id WHERE reviews.review_id = $1 GROUP BY reviews.review_id;",
       [reviewID]
     )
-    .then((result) => {
-      return result.rows[0];
+    .then(({ rows, rowCount }) => {
+      if (rowCount === 0) {
+        return Promise.reject({ status: 404, msg: "Review does not exist" });
+      }
+      return rows[0];
     });
 };
 
@@ -22,8 +25,3 @@ exports.selectUsers = () => {
     return users.rows;
   });
 };
-
-// SELECT reviews.*, COUNT(*) AS comment_count FROM reviews
-//     LEFT JOIN comments ON reviews.review_id = comments.review_id
-//     WHERE reviews.review_id = 2
-//     GROUP BY reviews.review_id;
