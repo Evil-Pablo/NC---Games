@@ -33,10 +33,10 @@ describe("app tests", () => {
       test("200: responds with review object passed by user", () => {
         const REVIEW_ID = 1;
         return request(app)
-          .get(`/api/reviews/1`)
+          .get(`/api/reviews/${REVIEW_ID}`)
           .expect(200)
-          .then(({ body: { review } }) => {
-            expect(reviews).toHaveProperty("review_id", 1);
+          .then(({ body: { reviews } }) => {
+            expect(reviews).toHaveProperty("review_id", REVIEW_ID);
             expect(reviews).toHaveProperty("title", "Agricola");
             expect(reviews).toHaveProperty("designer", "Uwe Rosenberg");
             expect(reviews).toHaveProperty("owner", "mallionaire");
@@ -62,6 +62,8 @@ describe("app tests", () => {
           .expect(200)
           .then(({ body: { reviews } }) => {
             expect(reviews).toHaveProperty("comment_count", 3);
+          });
+      });
     });
     describe("PATCH /api/reviews/:review_id", () => {
       test("200: responds with updated review object where vote is incremented by newVote value", () => {
