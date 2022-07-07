@@ -111,7 +111,6 @@ describe("app tests", () => {
           .get("/api/reviews")
           .expect(200)
           .then(({ body: { reviews } }) => {
-            console.log(reviews);
             const reviewKeys = Object.keys(reviews[0]);
             expect(reviewKeys).toHaveLength(10);
             reviews.forEach((review) => {
