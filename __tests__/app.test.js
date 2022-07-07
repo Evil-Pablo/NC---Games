@@ -33,9 +33,9 @@ describe("app tests", () => {
       test("200: responds with review object passed by user", () => {
         const REVIEW_ID = 1;
         return request(app)
-          .get(`/api/reviews/${REVIEW_ID}`)
+          .get(`/api/reviews/1`)
           .expect(200)
-          .then(({ body: { reviews } }) => {
+          .then(({ body: { review } }) => {
             expect(reviews).toHaveProperty("review_id", 1);
             expect(reviews).toHaveProperty("title", "Agricola");
             expect(reviews).toHaveProperty("designer", "Uwe Rosenberg");
@@ -62,6 +62,28 @@ describe("app tests", () => {
           .expect(200)
           .then(({ body: { reviews } }) => {
             expect(reviews).toHaveProperty("comment_count", 3);
+    });
+    describe("PATCH /api/reviews/:review_id", () => {
+      test("200: responds with updated review object where vote is incremented by newVote value", () => {
+        const REVIEW_ID = 1;
+        const VOTE_INCREMENT = { inc_votes: 2 };
+        return request(app)
+          .patch(`/api/reviews/${REVIEW_ID}`)
+          .send(VOTE_INCREMENT)
+          .expect(200)
+          .then(({ body: { reviews } }) => {
+            expect(reviews).toEqual({
+              review_id: REVIEW_ID,
+              title: "Agricola",
+              designer: "Uwe Rosenberg",
+              owner: "mallionaire",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "Farmyard fun!",
+              category: "euro game",
+              created_at: "2021-01-18T10:00:20.514Z",
+              votes: 3,
+            });
           });
       });
     });
@@ -90,6 +112,69 @@ describe("app tests", () => {
           .expect(404)
           .then(({ body: { msg } }) => {
             expect(msg).toBe("Invalid Path");
+          });
+      });
+    });
+    describe("/api/reviews/:review_id", () => {
+      test("404: ID doesn't exist", () => {
+        const REVIEW_ID = 0;
+        return request(app)
+          .get(`/api/reviews/${REVIEW_ID}`)
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Review does not exist");
+          });
+      });
+
+      test("400: Review ID datatype invalid", () => {
+        const REVIEW_ID = "invalidID";
+        return request(app)
+          .get(`/api/reviews/${REVIEW_ID}`)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid input data");
+          });
+      });
+      test("404: ID doesn't exist", () => {
+        const REVIEW_ID = 0;
+        const VOTE_INCREMENT = { inc_votes: 2 };
+        return request(app)
+          .patch(`/api/reviews/${REVIEW_ID}`)
+          .send(VOTE_INCREMENT)
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Review does not exist");
+          });
+      });
+      test("400: invalid input data", () => {
+        const REVIEW_ID = 1;
+        const VOTE_INCREMENT = { inc_votes: "two" };
+        return request(app)
+          .patch(`/api/reviews/${REVIEW_ID}`)
+          .send(VOTE_INCREMENT)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid input data");
+          });
+      });
+      test("400: invalid key on input data", () => {
+        const REVIEW_ID = 1;
+        const VOTE_INCREMENT = { wrong_key: 1 };
+        return request(app)
+          .patch(`/api/reviews/${REVIEW_ID}`)
+          .send(VOTE_INCREMENT)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid input data");
+          });
+      });
+      test("400: Review ID datatype invalid", () => {
+        const REVIEW_ID = "invalidID";
+        return request(app)
+          .patch(`/api/reviews/${REVIEW_ID}`)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid input data");
           });
       });
     });
