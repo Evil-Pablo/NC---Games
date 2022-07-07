@@ -107,6 +107,17 @@ describe("app tests", () => {
             expect(msg).toBe("Invalid input data");
           });
       });
+      test("404: ID doesn't exist", () => {
+        const REVIEW_ID = 0;
+        const VOTE_INCREMENT = { inc_votes: 2 };
+        return request(app)
+          .patch(`/api/reviews/${REVIEW_ID}`)
+          .send(VOTE_INCREMENT)
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Review does not exist");
+          });
+      });
       test("400: invalid input data", () => {
         const REVIEW_ID = 1;
         const VOTE_INCREMENT = { inc_votes: "two" };
