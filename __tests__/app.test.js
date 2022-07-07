@@ -105,6 +105,30 @@ describe("app tests", () => {
           });
       });
     });
+    describe("GET /api/reviews", () => {
+      test("200: responds with reviews sorted by date in descending order", () => {
+        return request(app)
+          .get("/api/reviews")
+          .expect(200)
+          .then(({ body: { reviews } }) => {
+            const reviewKeys = Object.keys(reviews[0]);
+            expect(reviewKeys).toHaveLength(10);
+            reviews.forEach((review) => {
+              expect(review).toHaveProperty("owner");
+              expect(review).toHaveProperty("title");
+              expect(review).toHaveProperty("review_id");
+              expect(review).toHaveProperty("category");
+              expect(review).toHaveProperty("review_img_url");
+              expect(review).toHaveProperty("created_at");
+              expect(review).toHaveProperty("votes");
+              expect(review).toHaveProperty("review_body");
+              expect(review).toHaveProperty("designer");
+              expect(review).toHaveProperty("comment_count");
+            });
+            expect(reviews).toBeSortedBy("created_at", { descending: true });
+          });
+      });
+    });
   });
   describe("app Sad Path", () => {
     describe("badpath", () => {
