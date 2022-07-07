@@ -42,3 +42,19 @@ exports.selectUsers = () => {
     return users.rows;
   });
 };
+
+exports.selectCommentsByReviewID = (reviewID) => {
+  return db
+    .query(
+      `
+      SELECT * FROM comments
+      WHERE review_id = $1`,
+      [reviewID]
+    )
+    .then(({ rows, rowCount }) => {
+      if (rowCount === 0) {
+        return Promise.reject({ status: 404, msg: "Review does not exist" });
+      }
+      return rows;
+    });
+};

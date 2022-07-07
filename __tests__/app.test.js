@@ -105,6 +105,27 @@ describe("app tests", () => {
           });
       });
     });
+    describe("GET /api/reviews/:review_id/comments", () => {
+      test("200: responds with all comments for the specified review", () => {
+        const REVIEW_ID = 2;
+        return request(app)
+          .get(`/api/reviews/${REVIEW_ID}/comments`)
+          .expect(200)
+          .then(({ body: { comments } }) => {
+            console.log(comments);
+            const commentKeys = Object.keys(comments[0]);
+            expect(commentKeys).toHaveLength(6);
+            comments.forEach((comment) => {
+              expect(comment).toHaveProperty("comment_id");
+              expect(comment).toHaveProperty("body");
+              expect(comment).toHaveProperty("review_id", REVIEW_ID);
+              expect(comment).toHaveProperty("author");
+              expect(comment).toHaveProperty("votes");
+              expect(comment).toHaveProperty("created_at");
+            });
+          });
+      });
+    });
   });
   describe("app Sad Path", () => {
     describe("badpath", () => {
