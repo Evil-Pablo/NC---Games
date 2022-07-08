@@ -201,5 +201,17 @@ describe("app tests", () => {
           });
       });
     });
+
+    describe("GET /api/reviews/:review_id/comments", () => {
+      test("400: Review ID datatype invalid", () => {
+        const REVIEW_ID = "invalidID";
+        return request(app)
+          .get(`/api/reviews/${REVIEW_ID}/comments`)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid input data");
+          });
+      });
+    });
   });
 });
