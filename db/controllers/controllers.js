@@ -4,6 +4,7 @@ const {
   updateVoteByReviewID,
   selectUsers,
   selectCommentsByReviewID,
+  selectReviews,
 } = require("../models/models");
 
 exports.getCategories = (req, res) => {
@@ -41,6 +42,7 @@ exports.getUsers = (req, res) => {
   });
 };
 
+
 exports.getCommentsByReviewID = (req, res, next) => {
   let reviewID = req.params.review_id;
   selectCommentsByReviewID(reviewID)
@@ -50,4 +52,9 @@ exports.getCommentsByReviewID = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+
+exports.getReviews = (req, res) => {
+  selectReviews().then((reviews) => {
+    res.status(200).send({ reviews });
+  });
 };
