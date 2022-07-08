@@ -129,6 +129,27 @@ describe("app tests", () => {
           });
       });
     });
+    describe("POST /api/reviews/:review_id/comments", () => {
+      test("201: responds with the posted comment", () => {
+        const REVIEW_ID = 1;
+        const NEW_COMMENT = {
+          username: "mallionaire",
+          body: "test comment",
+        };
+        return request(app)
+          .post(`/api/reviews/${REVIEW_ID}/comments`)
+          .send(NEW_COMMENT)
+          .expect(201)
+          .then(({ body: { comments } }) => {
+            expect(comments).toHaveProperty("comment_id");
+            expect(comments).toHaveProperty("author", "mallionaire");
+            expect(comments).toHaveProperty("body", "test comment");
+            expect(comments).toHaveProperty("review_id", REVIEW_ID);
+            expect(comments).toHaveProperty("votes");
+            expect(comments).toHaveProperty("created_at");
+          });
+      });
+    });
   });
   describe("app Sad Path", () => {
     describe("badpath", () => {
@@ -198,6 +219,50 @@ describe("app tests", () => {
         const REVIEW_ID = "invalidID";
         return request(app)
           .patch(`/api/reviews/${REVIEW_ID}`)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid input data");
+          });
+      });
+    });
+    describe("POST /api/reviews/:review_id/comments", () => {
+      test("404: ID doesn't exist", () => {
+        const REVIEW_ID = 9999;
+        const NEW_COMMENT = {
+          username: "mallionaire",
+          body: "test comment",
+        };
+        return request(app)
+          .post(`/api/reviews/${REVIEW_ID}/comments`)
+          .send(NEW_COMMENT)
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Input does not exist");
+          });
+      });
+      test("404: Username doesn't exist", () => {
+        const REVIEW_ID = 9999;
+        const NEW_COMMENT = {
+          username: "test_name",
+          body: "test comment",
+        };
+        return request(app)
+          .post(`/api/reviews/${REVIEW_ID}/comments`)
+          .send(NEW_COMMENT)
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Input does not exist");
+          });
+      });
+      test("400: Review ID data type invalid", () => {
+        const REVIEW_ID = "invalidID";
+        const NEW_COMMENT = {
+          username: "mallionaire",
+          body: "test comment",
+        };
+        return request(app)
+          .post(`/api/reviews/${REVIEW_ID}/comments`)
+          .send(NEW_COMMENT)
           .expect(400)
           .then(({ body: { msg } }) => {
             expect(msg).toBe("Invalid input data");

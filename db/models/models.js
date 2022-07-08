@@ -59,3 +59,27 @@ exports.selectReviews = () => {
       return reviews.rows;
     });
 };
+
+exports.insertCommentByReviewID = (reviewID, newComment) => {
+  const { username, body } = newComment;
+  // selectReviewByID(reviewID).then(() => {
+  return db
+    .query(
+      `INSERT INTO comments
+      (review_id, author, body) 
+      VALUES 
+      ($1, $2, $3)
+      RETURNING *;`,
+      [reviewID, username, body]
+    )
+    .then(({ rows, rowCount }) => {
+      console.log("MODELS ROWCOUNT>>>>>>", rowCount);
+      if (!rows) {
+        return Promise.reject({ status: 404, msg: "Review does not exist" });
+      }
+      console.log("MODELS >>>>", rows[0]);
+
+      return rows[0];
+    });
+  // });
+};
